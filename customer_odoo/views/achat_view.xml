@@ -1,0 +1,66 @@
+<odoo>
+  <data>
+  
+   <record id="view_purchase_form_inherit" model="ir.ui.view">
+      <field name="name">purchase.order.form.inherit</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id" ref="purchase.purchase_order_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='date_order']" position="after">
+          <field name="discount_applies" widget="radio" options="{'horizontal': true}" groups="product.group_product_pricelist"/>
+        </xpath>
+
+        <xpath expr="//page/field[@name='order_line']/tree/field[@name='name']" position="after">
+            <field name="discount_method"/>
+        </xpath>
+        <xpath expr="//page/field[@name='order_line']/tree/field[@name='discount_method']" position="after">
+            <field name="discount_amount"/>
+        </xpath>
+
+        <xpath expr="//page/field[@name='order_line']/tree/field[@name='discount_method']" position="attributes">
+            <attribute name="attrs">{'column_invisible': [('parent.discount_applies', '=', 'Global')]}</attribute>
+        </xpath>
+        <xpath expr="//page/field[@name='order_line']/tree/field[@name='discount_amount']" position="attributes">
+            <attribute name="attrs">{'column_invisible': [('parent.discount_applies', '=', 'Global')]}</attribute>
+        </xpath>
+        <xpath expr="//page/group/group/field[@name='tax_totals_json']" position="before">
+            <field name="line_discount"/>
+        </xpath>
+        <xpath expr="//page/group/group/field[@name='notes']" position="before">
+           <field name="discount_methodsfe" attrs="{'invisible': [('discount_applies', '!=', 'Global')]}"/>
+           <field name="discount_amountsfe" attrs="{'invisible': [('discount_applies', '!=', 'Global')]}"/>  
+        </xpath>
+
+        <xpath expr="//page/group/group/field[@name='tax_totals_json']" position="attributes">
+            <attribute name="invisible">1</attribute>        
+        </xpath>
+
+        <xpath expr="//field[@name='line_discount']" position="before">
+            <field name="amount_untaxed"/>
+        </xpath>
+        <xpath expr="//field[@name='line_discount']" position="after">
+            <field name="amount_tax"/>
+                <hr/>      <hr/>
+            <field name="amount_total"/>
+        </xpath>
+
+      </field>
+    </record>
+
+
+
+   <!-- <record id="view_account_move_form_inherit" model="ir.ui.view">
+      <field name="name">account.move.form.inherit</field>
+      <field name="model">account.move</field>
+      <field name="inherit_id" ref="account.view_move_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//group/group/field[@name='currency_id']" position="after">
+           <field name="discount_applies"/>
+        </xpath>
+      </field>
+    </record> -->
+
+
+
+  </data>
+</odoo>
